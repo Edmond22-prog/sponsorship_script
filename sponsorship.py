@@ -271,11 +271,11 @@ if len(GODSONS) > 0:
 
 # Count assigned godsons
 count = 0
-# for sponsorship in SPONSORSHIPS:
-#     sponsorship.object_description()
-#     count += len(sponsorship.godsons)
-#
-# print(f"Number of godsons assigned: {count}\n")
+for sponsorship in SPONSORSHIPS:
+    sponsorship.object_description()
+    count += len(sponsorship.godsons)
+
+print(f"Number of godsons assigned: {count}\n")
 
 # ======================================================================================================
 
@@ -283,7 +283,7 @@ count = 0
 
 
 # Function who will be used to sort the list of sponsorship by godfather name
-def extract_name(json_file):
+def extract_name_json(json_file):
     try:
         return json_file["godfather"]
     except KeyError:
@@ -293,9 +293,33 @@ def extract_name(json_file):
 SPONSORSHIPS_JSON = [sponsorship.toJSON() for sponsorship in SPONSORSHIPS]
 
 # Sort the list of sponsorship by godfather name
-SPONSORSHIPS_JSON.sort(key=extract_name)
+SPONSORSHIPS_JSON.sort(key=extract_name_json)
 print(json.dumps(SPONSORSHIPS_JSON, indent=4, ensure_ascii=False))
 
 # Generate the json file
 with open(f"sponsorships_{datetime.now().timestamp()}.json", "w") as file:
     json.dump(SPONSORSHIPS_JSON, file, indent=4, ensure_ascii=False)
+
+
+# ==========================================================================================================
+
+# ===================== TXT FILE GENERATION SECTION ========================================================
+
+def extract_name(obj):
+    try:
+        return obj.godfather.name
+    except:
+        return "No name"
+
+
+SPONSORSHIPS.sort(key=extract_name)
+
+with open(f"sponsorships_{datetime.now().timestamp()}.txt", "w") as file:
+    for sponsoring in SPONSORSHIPS:
+        file.write(f"SPONSOR : {sponsoring.godfather.name} ({sponsoring.godfather.number})\n")
+        file.write("MENTEES :\n")
+        for godson in sponsoring.godsons:
+            file.write(f"{godson.name} ({godson.number})\n")
+        file.write("\n\n")
+
+# ==========================================================================================================
