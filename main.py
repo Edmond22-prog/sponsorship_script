@@ -1,3 +1,7 @@
+import json
+
+from datetime import datetime
+
 from core.sponsoring_process import SponsoringProcess
 from utils.getters_utils import retrieve_godfathers, retrieve_godsons
 
@@ -19,6 +23,16 @@ def main():
     sponsoring_process = SponsoringProcess(VALIDATED_GODFATHERS, VALIDATED_GODSONS)
     sponsoring_process.execution()
     sponsoring_process.display_sponsorship()
+    
+    # This part is for the generation of the JSON list who will be use by the Frontend
+    SPONSORSHIPS = sponsoring_process.get_sponsorship()
+    SPONSORSHIPS_JSON = [sponsorship.toJSON() for sponsorship in SPONSORSHIPS]
+    # Sort the list by the godfather's name
+    SPONSORSHIPS_JSON.sort(key=lambda value:value["godfather"]["name"])
+    # Build the json file
+    with open(f"sponsorships_{datetime.now().timestamp()}.json", "w") as file:
+        json.dump(SPONSORSHIPS_JSON, file, indent=4, ensure_ascii=False)
 
 
-main()
+if "__main__" == __name__:
+    main()
