@@ -17,7 +17,7 @@ def retrieve_godfathers(
     for _, row in df_godfather.iterrows():
         godfather = GodFather.factory(
             mail=row["Nom d'utilisateur"],
-            name=row["Nom(s) et Prénom(s) "],
+            name=row["Nom(s) et Prénom(s) "].strip(),
             sex=row["Sexe"],
             number=row["Numéro de téléphone "],
             level=row["Niveau académique "],
@@ -51,7 +51,7 @@ def retrieve_godsons(
         if phone_number.startswith("INVALID PHONE NUMBER"):
             godson = GodSon.factory(
                 mail=row["Nom d'utilisateur"],
-                name=row["Nom(s) et Prénom(s) "],
+                name=row["Nom(s) et Prénom(s) "].strip(),
                 sex=row["Sexe"],
                 number=phone_number,
                 level=row["Niveau académique "],
@@ -66,7 +66,7 @@ def retrieve_godsons(
         else:
             godson = GodSon.factory(
                 mail=row["Nom d'utilisateur"],
-                name=row["Nom(s) et Prénom(s) "],
+                name=row["Nom(s) et Prénom(s) "].strip(),
                 sex=row["Sexe"],
                 number=phone_number,
                 level=row["Niveau académique "],
